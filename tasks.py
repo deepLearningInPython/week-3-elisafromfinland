@@ -16,7 +16,8 @@ import numpy as np
 # -----------------------------------------------
 
 def compute_output_size_1d(input_array, kernel_array):
-    pass
+    output_length = (len(input_array) - len(kernel_array) + 1)
+    return output_length
 
 
 # -----------------------------------------------
@@ -37,7 +38,11 @@ print(compute_output_size_1d(input_array, kernel_array))
 def convolve_1d(input_array, kernel_array):
     # Tip: start by initializing an empty output array (you can use your function above to calculate the correct size).
     # Then fill the cells in the array with a loop.
-    pass
+    output_length = np.array(compute_output_size_1d(input_array, kernel_array))
+    output_array = np.zeros(output_length)
+    for i in range(output_length): 
+        output_array[i] = input_array[i:i + len(kernel_array)] @ kernel_array
+        return output_array
 
 # -----------------------------------------------
 # Another tip: write test cases like this, so you can easily test your function.
@@ -56,8 +61,14 @@ print(convolve_1d(input_array, kernel_array))
 # -----------------------------------------------
 
 def compute_output_size_2d(input_matrix, kernel_matrix):
-    pass
-
+    input_height = len(input_matrix)        # Number of rows in the input matrix
+    input_width = len(input_matrix[0])     # Number of columns in the input matrix
+    kernel_height = len(kernel_matrix)     # Number of rows in the kernel
+    kernel_width = len(kernel_matrix[0]) 
+    height = input_height - kernel_height + 1
+    width = input_width - kernel_width + 1
+    output = (height, width)
+    return output
 
 # -----------------------------------------------
 
@@ -72,7 +83,22 @@ def compute_output_size_2d(input_matrix, kernel_matrix):
 def convolute_2d(input_matrix, kernel_matrix):
     # Tip: same tips as above, but you might need a nested loop here in order to
     # define which parts of the input matrix need to be multiplied with the kernel matrix.
-    pass
-
+    output_height, output_width = compute_output_size_2d(input_matrix, kernel_matrix)
+    # Initialize the output matrix
+    output_mat = [[0 for _ in range(output_width)] for _ in range(output_height)]
+    
+    kernel_height, kernel_width = len(kernel_matrix), len(kernel_matrix[0])
+    
+    # Perform the convolution
+    for i in range(output_height):
+        for j in range(output_width):
+            # Extract the region manually and compute the convolution
+            conv_sum = 0
+            for ki in range(kernel_height):
+                for kj in range(kernel_width):
+                    conv_sum += input_matrix[i + ki][j + kj] * kernel_matrix[ki][kj]
+            output_mat[i][j] = conv_sum
+    
+    return output_mat
 
 # -----------------------------------------------
