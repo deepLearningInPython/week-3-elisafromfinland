@@ -32,17 +32,22 @@ print(compute_output_size_1d(input_array, kernel_array))
 # Write a function that takes a one-dimensional numpy array (input_array) and a one-dimensional kernel array (kernel_array)
 # and returns their convolution (no padding, stride 1).
 
-# Your code here:
+# Your code here: 
 # -----------------------------------------------
 
 def convolve_1d(input_array, kernel_array):
     # Tip: start by initializing an empty output array (you can use your function above to calculate the correct size).
     # Then fill the cells in the array with a loop.
-    output_length = np.array(compute_output_size_1d(input_array, kernel_array))
+    input_length = len(input_array)
+    kernel_length = len(kernel_array)
+    
+    output_length = compute_output_size_1d(input_array, kernel_array)
     output_array = np.zeros(output_length)
-    for i in range(output_length): 
-        output_array[i] = input_array[i:i + len(kernel_array)] @ kernel_array
-        return output_array
+    
+    for i in range(output_length):  # Use `output_length` as the range
+        output_array[i] = sum(input_array[i:i + kernel_length] * kernel_array)
+    
+    return output_array
 
 # -----------------------------------------------
 # Another tip: write test cases like this, so you can easily test your function.
